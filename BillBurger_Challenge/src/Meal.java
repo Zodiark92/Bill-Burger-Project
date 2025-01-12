@@ -6,6 +6,7 @@ public class Meal {
     private Drink drink;
     private SideItem sideItem;
     private double totalPrice;
+    private double discount = 0.25;
 
     public Meal(String size) throws InvalidNameException {
         this(0, size);
@@ -89,15 +90,23 @@ public class Meal {
                 };
     }
 
+    public double computeMealPrice(boolean isMenu) {
+        if(isMenu){
+            this.totalPrice -= discount * totalPrice;
+        }
+        return this.totalPrice;
+    }
+
     public boolean addDrink(int drinkCode) throws InvalidNameException {
         this.drink = Drink.getDrink(drinkCode, hamburger.getSize().toUpperCase());
         this.totalPrice += drink.getPrice();
         return this.drink != null;
     }
 
-    public void addSideItem (String type, boolean isMenu) {
-        this.sideItem = new SideItem(type, isMenu ? 0.0 : 2.50);
+    public void addSideItem (int code, boolean isMenu) throws InvalidNameException {
+        this.sideItem = SideItem.getSideItem(code, isMenu);
         this.totalPrice += this.sideItem.getPrice();
+        System.out.printf("Side item %s added. Total price: %.2f%n", sideItem.getType(),  this.totalPrice);
     }
 
     public double getTotalPrice() {
@@ -116,13 +125,15 @@ public class Meal {
         return sideItem;
     }
 
+    public double getDiscount() {
+        return discount;
+    }
+
     @Override
     public String toString() {
-        return "Meal{" +
-                "hamburger=" + hamburger +
-                ", drink=" + drink +
-                ", sideItem=" + sideItem +
-                ", totalPrice=" + totalPrice +
-                '}';
+        return "Meal: \n" +
+                "Hamburger: " + hamburger +
+                "Drink: " + drink + "\n" +
+                "SideItem: " + sideItem;
     }
 }

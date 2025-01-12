@@ -7,7 +7,7 @@ public class OrderManager {
 
     private int checkHamburgerCode = 14;
 
-    public boolean createMenu(Scanner scanner, boolean onlyBurgerMeal) throws InvalidNameException {
+    public boolean createMenu(Scanner scanner, boolean isMenu) throws InvalidNameException {
 
         while (true) {
             try {
@@ -34,10 +34,18 @@ public class OrderManager {
                     addRemoveTopping(scanner, true);
                 }
 
+                System.out.println("[Order Manager] Total Hamburger Price: " + meal.getTotalPrice());
+
+                if(isMenu){
                 System.out.println("*** Add the drink ***");
                 editDrink(scanner);
 
-                return meal != null;
+                System.out.println("*** Add the Side Item ***");
+                addSideItem(scanner, isMenu);
+                System.out.printf("[Order Manager] Final price after the menu discount: %.2f%n ",  meal.computeMealPrice(true));
+               }
+
+                return true;
 
             } catch (InvalidNameException e){
                 System.out.println("[Order Manager] " + e.getMessage());
@@ -211,7 +219,7 @@ public class OrderManager {
                 if(drinkCodeInput >= 0 && drinkCodeInput <= 3){
                     meal.addDrink(drinkCodeInput);
                     System.out.printf("[Order Manager] Drink %s added to the menu.%n" +
-                            "Meal price: %f", meal.getDrink().getDrinkDesc(), meal.getTotalPrice());
+                            "Meal price: %.2f%n ", meal.getDrink().getDrinkDesc(), meal.getTotalPrice());
                     break;
                 } else {
                     throw new InvalidNameException();
@@ -225,21 +233,25 @@ public class OrderManager {
     }
 
     public void addSideItem(Scanner scanner, boolean isMenu) throws InvalidNameException {
-        printSideItems();
+
         while(true) {
             try {
+                printSideItems();
                 System.out.print("Enter the side item code: ");
                 int sideItemCode = Integer.parseInt(scanner.nextLine());
 
                 if (sideItemCode >= 0 && sideItemCode <= 3) {
                     //add the side item to the burger
-                  //  meal.addSideItem();
+                    meal.addSideItem(sideItemCode, isMenu);
+                    break;
                 } else {
                     throw new InvalidNameException();
                 }
 
             } catch (InvalidNameException e) {
-                System.out.println("[Order Manager] Invalid code. Please insert a valid code for the side item");
+                System.out.println("[Order Manager] Invalid code. Please insert a valid code for the side item.");
+            } catch(NumberFormatException e){
+                System.out.println("[Order Manager] Invalid input. Please retry inserting the correct side item code.");
             }
 
         }
@@ -254,7 +266,7 @@ public class OrderManager {
     }
 
     public void confirmAndPay() {
-        System.out.println("Total price: " + this.meal.getTotalPrice());
+        System.out.printf("Total price: %.2f dollars%n", this.meal.getTotalPrice());
     }
 
     public static void printHamburgerMenu() {

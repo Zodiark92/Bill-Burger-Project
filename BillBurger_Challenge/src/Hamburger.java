@@ -170,19 +170,17 @@ public class Hamburger {
 
     @Override
     public String toString() {
-        return "Hamburger{" +
-                "hamburgerCode=" + hamburgerCode +
-                ", hamburgerDesc='" + hamburgerDesc + '\'' +
-                ", meat='" + meat + '\'' +
-                ", size='" + size + '\'' +
-                ", deluxe=" + deluxe +
-                ", burgerPrice=" + burgerPrice +
-                ", firstTopping='" + firstTopping + '\'' +
-                ", secondTopping='" + secondTopping + '\'' +
-                ", thirdTopping='" + thirdTopping + '\'' +
-                ", sauce='" + sauce + '\'' +
-                ", toppings=" + toppings +
-                '}' + toppings.toString();
+        String hamburgerDesc = this.hamburgerDesc + "\n";
+        if(firstTopping != null){
+            hamburgerDesc =  hamburgerDesc.concat("Extra Topping: " + firstTopping + "\n");
+        }
+        if(secondTopping != null){
+            hamburgerDesc = hamburgerDesc.concat("Extra Topping: " + secondTopping + "\n");
+        }
+        if(thirdTopping != null){
+            hamburgerDesc =  hamburgerDesc.concat("Extra Topping: " + thirdTopping + "\n");
+        }
+        return hamburgerDesc;
     }
 
     protected double getBurgerPrice() {
@@ -380,6 +378,18 @@ class DeluxeHamburger extends Hamburger {
         if(secondDeluxeTopping != null){
             System.out.println("- " + secondDeluxeTopping);
         }
+    }
+
+    @Override
+    public String toString() {
+        String hamburgerDescription = super.toString();
+        if(firstDeluxeTopping != null){
+            hamburgerDescription = hamburgerDescription.concat("Topping: " + firstDeluxeTopping + "\n");
+        }
+        if(secondDeluxeTopping != null){
+            hamburgerDescription =  hamburgerDescription.concat("Topping:  " + secondDeluxeTopping + "\n");
+        }
+        return hamburgerDescription;
     }
 }
 

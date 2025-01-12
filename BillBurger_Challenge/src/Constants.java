@@ -50,9 +50,9 @@ public class Constants {
 
     //SIDE ITEMS
 
+    public static String FRIES_WITH_KETCHUP = "FRIES WITH KETCHUP";
     public static String BILL_NUGGETS = "BILL NUGGETS";
-    public static String BILL_FRIES = "BILL FRIES";
-    public static String BACON_BILL_FRIES = "BACON BILL FRIES";
+    public static String FRIES_WITH_MAYO = "FRIES WITH MAYO";
     public static String ONION_RINGS = "ONION RINGS";
 
 }

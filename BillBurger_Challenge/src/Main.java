@@ -11,10 +11,9 @@ public class Main {
         OrderManager order = new OrderManager();
 
         boolean orderCreated;
-        boolean orderCompleted;
+        boolean orderCompleted = false;
 
         while(true) {
-
             try{
                 System.out.println("""
                     Choose an option:
@@ -24,17 +23,22 @@ public class Main {
                     """);
                 System.out.print("Input: ");
                 String input = scanner.nextLine();
+                boolean isMenu;
                 if(input.equalsIgnoreCase("Q")){
                     break;
                 } else if (input.equalsIgnoreCase("1")) {
                     orderCreated = order.createMenu(scanner, true);
+                    isMenu = true;
+                    orderCompleted = true;
+                    System.out.println("Order correctly inserted! :)");
                 } else if (input.equalsIgnoreCase("2")) {
                     orderCreated = order.createMenu(scanner, false);
+                    isMenu = false;
                 } else {
                     throw new InputMismatchException("Invalid input");
                 }
 
-                if(orderCreated) {
+                if(orderCreated && !isMenu) {
                     System.out.print("""
                                     Order correctly inserted! :)
                                     Do you want to add other items? (y/n): """);
@@ -46,7 +50,7 @@ public class Main {
                     } else {
                         throw new InputMismatchException("Invalid input");
                     }
-                } else {
+                } else if(!orderCreated) {
                     throw new Exception("Meal not created");
                 }
 

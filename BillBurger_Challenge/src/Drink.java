@@ -29,6 +29,11 @@ public class Drink {
     public String getDrinkDesc() {
         return drinkDesc;
     }
+
+    @Override
+    public String toString() {
+        return drinkDesc;
+    }
 }
 
 class Water extends Drink{
