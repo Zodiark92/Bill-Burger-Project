@@ -39,17 +39,20 @@ public class Main {
                 }
 
                 if(orderCreated && !isMenu) {
-                    System.out.print("""
-                                    Order correctly inserted! :)
-                                    Do you want to add other items? (y/n): """);
-                    input = scanner.nextLine();
-                    if(input.equalsIgnoreCase("Y")){
-                        orderCompleted = order.editMenu(scanner);
-                    } else if (input.equalsIgnoreCase("n")) {
-                        orderCompleted = true;
-                    } else {
-                        throw new InputMismatchException("Invalid input");
+                    while(true) {
+                        System.out.print("Do you want to add other items? (y/n): ");
+                        input = scanner.nextLine();
+                        if(input.equalsIgnoreCase("Y")){
+                            orderCompleted = order.editMenu(scanner);
+                            break;
+                        } else if (input.equalsIgnoreCase("N")) {
+                            orderCompleted = true;
+                            break;
+                        } else {
+                           System.out.println("Invalid input. Please insert Y o N");
+                        }
                     }
+
                 } else if(!orderCreated) {
                     throw new Exception("Meal not created");
                 }

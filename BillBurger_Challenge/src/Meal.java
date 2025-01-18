@@ -131,9 +131,20 @@ public class Meal {
 
     @Override
     public String toString() {
-        return "Meal: \n" +
-                "Hamburger: " + hamburger +
-                "Drink: " + drink + "\n" +
-                "SideItem: " + sideItem;
+        String descriptionMenu;
+        descriptionMenu = "Meal: \n" +
+        "Hamburger: " + hamburger;
+        if(drink != null) {
+          descriptionMenu =  descriptionMenu.concat("Drink: " + drink + "\n");
+        } else {
+          descriptionMenu =  descriptionMenu.concat("Drink: " + "none selected\n");
+        }
+        if(sideItem != null) {
+          descriptionMenu =  descriptionMenu.concat("Side Item: " + sideItem + "\n");
+        } else {
+          descriptionMenu =  descriptionMenu.concat("Side Item: " + "none selected\n");
+        }
+        
+        return descriptionMenu;
     }
 }

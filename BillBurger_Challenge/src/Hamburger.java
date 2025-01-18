@@ -384,10 +384,10 @@ class DeluxeHamburger extends Hamburger {
     public String toString() {
         String hamburgerDescription = super.toString();
         if(firstDeluxeTopping != null){
-            hamburgerDescription = hamburgerDescription.concat("Topping: " + firstDeluxeTopping + "\n");
+            hamburgerDescription = hamburgerDescription.concat("Deluxe Topping: " + firstDeluxeTopping + "\n");
         }
         if(secondDeluxeTopping != null){
-            hamburgerDescription =  hamburgerDescription.concat("Topping:  " + secondDeluxeTopping + "\n");
+            hamburgerDescription =  hamburgerDescription.concat("Deluxe Topping:  " + secondDeluxeTopping + "\n");
         }
         return hamburgerDescription;
     }

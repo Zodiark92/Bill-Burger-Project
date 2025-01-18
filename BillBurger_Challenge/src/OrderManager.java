@@ -7,7 +7,7 @@ public class OrderManager {
 
     private int checkHamburgerCode = 14;
 
-    public boolean createMenu(Scanner scanner, boolean isMenu) throws InvalidNameException {
+    public boolean createMenu(Scanner scanner, boolean isMenu)  {
 
         while (true) {
             try {
@@ -57,17 +57,6 @@ public class OrderManager {
             }
         }
 
-        // 1. create the hamburger
-
-        // 2. size of the hamburger
-
-        // 3. Add/remove ingredients in the hamburger
-
-        // 4. Edit drink
-
-        // 5. Add side item
-
-        // 6. Create the meal
     }
 
     //Choose the Hamburger and add it to the meal
