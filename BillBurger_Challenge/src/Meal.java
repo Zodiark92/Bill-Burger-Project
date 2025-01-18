@@ -28,6 +28,11 @@ public class Meal {
         }
     }
 
+    public Hamburger editHamburger(int hamburgerCode) throws InvalidNameException {
+        this.hamburger = Hamburger.getHamburger(hamburgerCode, hamburger.getSize());
+        return this.hamburger;
+    }
+
     public boolean addTopping(int numberTopping, int toppingCode) throws InvalidNameException {
         boolean toppingAdded;
         switch (toppingCode) {
@@ -90,7 +95,25 @@ public class Meal {
                 };
     }
 
-    public double computeMealPrice(boolean isMenu) {
+    public double computeMealPrice(boolean isMenu) throws InvalidNameException {
+        this.totalPrice = computeMealPrice(hamburger.getHamburgerCode(), hamburger.getSize());
+        if(hamburger.firstTopping != null){
+            this.totalPrice += hamburger.getAddingToppingPrice();
+        }
+        if(hamburger.secondTopping != null){
+            this.totalPrice += hamburger.getAddingToppingPrice();
+        }
+        if(hamburger.thirdTopping != null){
+            this.totalPrice += hamburger.getAddingToppingPrice();
+        }
+
+        if(drink != null){
+            this.totalPrice += drink.getPrice();
+        }
+        if(sideItem != null){
+            this.totalPrice += sideItem.getPrice();
+        }
+
         if(isMenu){
             this.totalPrice -= discount * totalPrice;
         }

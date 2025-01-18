@@ -11,30 +11,13 @@ public class OrderManager {
 
         while (true) {
             try {
-                printHamburgerMenu();
-
-                boolean addHamburger = addHamburger(scanner);
-                if(!addHamburger){
-                    throw new InvalidClassException("[Order Manager] Hamburger not created");
-                }
-
-                boolean isDeluxe = meal.getHamburger().isDeluxe();
-
-                if(!isDeluxe){
-                    System.out.print("Do you want to add/remove toppings from the burger? (y/n): ");
-                    String addingToppingInput = scanner.nextLine();
-
-                    if (addingToppingInput.equalsIgnoreCase("y")) {
-                        addRemoveTopping(scanner, false);
-                    } else if (!addingToppingInput.equalsIgnoreCase("n")) {
-                        throw new InvalidNameException("[Order Manager] Invalid adding topping input");
-                    }
+                System.out.println("*** Choose the Hamburger ***");
+                boolean hamburgerCreated = editHamburger(scanner, false);
+                if(hamburgerCreated) {
+                    System.out.println("[Order Manager] Total Hamburger Price: " + meal.getTotalPrice());
                 } else {
-                    System.out.println("*** Add the toppings to the deluxe hamburger ***");
-                    addRemoveTopping(scanner, true);
+                    throw new InvalidNameException("Invalid state exception. Hamburger not created");
                 }
-
-                System.out.println("[Order Manager] Total Hamburger Price: " + meal.getTotalPrice());
 
                 if(isMenu){
                 System.out.println("*** Add the drink ***");
@@ -59,11 +42,36 @@ public class OrderManager {
 
     }
 
+    private boolean editHamburger(Scanner scanner, boolean isEdit) throws InvalidNameException, InvalidClassException {
+
+        boolean addHamburger = addHamburger(scanner, isEdit);
+        if(!addHamburger){
+            throw new InvalidClassException("[Order Manager] Hamburger not created");
+        }
+
+        boolean isDeluxe = meal.getHamburger().isDeluxe();
+
+        if(!isDeluxe){
+            System.out.print("Do you want to add/remove toppings from the burger? (y/n): ");
+            String addingToppingInput = scanner.nextLine();
+
+            if (addingToppingInput.equalsIgnoreCase("y")) {
+                addRemoveTopping(scanner, false);
+            } else if (!addingToppingInput.equalsIgnoreCase("n")) {
+                throw new InvalidNameException("[Order Manager] Invalid adding topping input");
+            }
+        } else {
+            System.out.println("*** Add the toppings to the deluxe hamburger ***");
+            addRemoveTopping(scanner, true);
+        }
+
+        return true;
+    }
+
     //Choose the Hamburger and add it to the meal
-    public boolean addHamburger(Scanner scanner) throws InvalidNameException {
+    public boolean addHamburger(Scanner scanner, boolean isEdit) throws InvalidNameException {
 
-        System.out.println("*** Choose the Hamburger ***");
-
+        printHamburgerMenu();
         System.out.print("Insert the hamburger code: ");
         int hamburgerCode = Integer.parseInt(scanner.nextLine());
 
@@ -71,30 +79,68 @@ public class OrderManager {
             throw new InvalidNameException("Hamburger not found");
         }
 
-        System.out.print("Insert the size (M/L/XL): ");
-        String sizeInput = scanner.nextLine().toUpperCase();
+        String sizeInput = null;
 
-        if (!sizeInput.equalsIgnoreCase("M") && !sizeInput.equalsIgnoreCase("L") &&
-                !sizeInput.equalsIgnoreCase("XL")) {
-            throw new InvalidNameException("Not valid size");
+        if(!isEdit) {
+            System.out.print("Insert the size (M/L/XL): ");
+            sizeInput = scanner.nextLine().toUpperCase();
+
+            if (!sizeInput.equalsIgnoreCase("M") && !sizeInput.equalsIgnoreCase("L") &&
+                    !sizeInput.equalsIgnoreCase("XL")) {
+                throw new InvalidNameException("Not valid size");
+            }
         }
 
-        if (hamburgerCode == 0) {
+        if (hamburgerCode == 0 && meal == null) {
             this.meal = new Meal(sizeInput);
             System.out.println("[Order Manager] *** Standard Menu created ***");
-        } else {
+        } else if(meal == null) {
             this.meal = new Meal(hamburgerCode, sizeInput);
             System.out.println("[Order Manager] *** Menu created ***");
+        } else {
+            meal.editHamburger(hamburgerCode);
         }
 
         return true;
     }
 
-    public boolean editMenu(Scanner scanner) throws InvalidNameException {
+    public boolean editMenu(Scanner scanner, boolean isMenu) {
+        while (true) {
+            try {
+                printOrder();
+                System.out.println("""
+                    0 - Confirm edit
+                    1 - Edit hamburger
+                    2 - Add or Edit Drink
+                    3 - Add or Edit Side Item
+                    """);
+                System.out.print("Enter option: ");
+                String input = scanner.nextLine();
+                if(input.equalsIgnoreCase("0")){
+                    System.out.println("[Order manager] Order completed");
+                    System.out.printf("[Order Manager] Price : %.2f%n ",  meal.getTotalPrice());
+                    return true;
+                } else if (input.equalsIgnoreCase("1")) {
+                    editHamburger(scanner, true);
+                } else if (input.equalsIgnoreCase("2")) {
+                    editDrink(scanner);
+                } else if(input.equalsIgnoreCase("3")) {
+                    addSideItem(scanner, false);
+                } else {
+                    System.out.println("[Order Manager] Invalid input");
+                }
 
-        meal.getHamburger().addTopping(1, Constants.CRISPY_ONIONS);
+                System.out.printf("[Order Manager] Price updated: %.2f%n ",  meal.computeMealPrice(isMenu));
 
-        return true;
+            } catch (InvalidNameException e){
+                System.out.println("[Order Manager] " + e.getMessage());
+                System.out.println("[Order Manager] Incorrect input. Please retry");
+            } catch(NumberFormatException e){
+                System.out.println("[Order Manager] Invalid input. Please Retry");
+            } catch (InvalidClassException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 

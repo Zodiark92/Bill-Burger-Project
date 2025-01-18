@@ -38,14 +38,19 @@ public class Main {
                     throw new InputMismatchException("Invalid input");
                 }
 
-                if(orderCreated && !isMenu) {
+                if(orderCreated) {
                     while(true) {
-                        System.out.print("Do you want to add other items? (y/n): ");
-                        input = scanner.nextLine();
-                        if(input.equalsIgnoreCase("Y")){
-                            orderCompleted = order.editMenu(scanner);
+                        order.printOrder();
+                       System.out.println("""
+                               Confirm Order?
+                               Y - Confirm Order
+                               N - Edit Order """);
+                       System.out.print("Option: ");
+                       input = scanner.nextLine();
+                        if(input.equalsIgnoreCase("N")){
+                            orderCompleted = order.editMenu(scanner, isMenu);
                             break;
-                        } else if (input.equalsIgnoreCase("N")) {
+                        } else if (input.equalsIgnoreCase("Y")) {
                             orderCompleted = true;
                             break;
                         } else {
@@ -53,7 +58,7 @@ public class Main {
                         }
                     }
 
-                } else if(!orderCreated) {
+                } else {
                     throw new Exception("Meal not created");
                 }
 
