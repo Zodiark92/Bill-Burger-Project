@@ -97,13 +97,14 @@ public class Meal {
 
     public double computeMealPrice(boolean isMenu) throws InvalidNameException {
         this.totalPrice = computeMealPrice(hamburger.getHamburgerCode(), hamburger.getSize());
-        if(hamburger.firstTopping != null){
+        boolean isDeluxe = hamburger.isDeluxe();
+        if(hamburger.firstTopping != null && !isDeluxe){
             this.totalPrice += hamburger.getAddingToppingPrice();
         }
-        if(hamburger.secondTopping != null){
+        if(hamburger.secondTopping != null && !isDeluxe){
             this.totalPrice += hamburger.getAddingToppingPrice();
         }
-        if(hamburger.thirdTopping != null){
+        if(hamburger.thirdTopping != null && !isDeluxe){
             this.totalPrice += hamburger.getAddingToppingPrice();
         }
 

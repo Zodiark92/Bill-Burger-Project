@@ -12,7 +12,7 @@ public class OrderManager {
         while (true) {
             try {
                 System.out.println("*** Choose the Hamburger ***");
-                boolean hamburgerCreated = editHamburger(scanner, false);
+                boolean hamburgerCreated = editHamburger(scanner, false, isMenu);
                 if(hamburgerCreated) {
                     System.out.println("[Order Manager] Total Hamburger Price: " + meal.getTotalPrice());
                 } else {
@@ -42,9 +42,9 @@ public class OrderManager {
 
     }
 
-    private boolean editHamburger(Scanner scanner, boolean isEdit) throws InvalidNameException, InvalidClassException {
+    private boolean editHamburger(Scanner scanner, boolean isEdit, boolean isMenu) throws InvalidNameException, InvalidClassException {
 
-        boolean addHamburger = addHamburger(scanner, isEdit);
+        boolean addHamburger = addHamburger(scanner, isEdit, isMenu);
         if(!addHamburger){
             throw new InvalidClassException("[Order Manager] Hamburger not created");
         }
@@ -69,7 +69,7 @@ public class OrderManager {
     }
 
     //Choose the Hamburger and add it to the meal
-    public boolean addHamburger(Scanner scanner, boolean isEdit) throws InvalidNameException {
+    public boolean addHamburger(Scanner scanner, boolean isEdit, boolean isMenu) throws InvalidNameException {
 
         printHamburgerMenu();
         System.out.print("Insert the hamburger code: ");
@@ -79,9 +79,9 @@ public class OrderManager {
             throw new InvalidNameException("Hamburger not found");
         }
 
-        String sizeInput = null;
+        String sizeInput = (!isMenu) ? "M" : null;
 
-        if(!isEdit) {
+        if(!isEdit && isMenu) {
             System.out.print("Insert the size (M/L/XL): ");
             sizeInput = scanner.nextLine().toUpperCase();
 
@@ -90,6 +90,7 @@ public class OrderManager {
                 throw new InvalidNameException("Not valid size");
             }
         }
+
 
         if (hamburgerCode == 0 && meal == null) {
             this.meal = new Meal(sizeInput);
@@ -121,7 +122,7 @@ public class OrderManager {
                     System.out.printf("[Order Manager] Price : %.2f%n ",  meal.getTotalPrice());
                     return true;
                 } else if (input.equalsIgnoreCase("1")) {
-                    editHamburger(scanner, true);
+                    editHamburger(scanner, true, isMenu);
                 } else if (input.equalsIgnoreCase("2")) {
                     editDrink(scanner);
                 } else if(input.equalsIgnoreCase("3")) {
@@ -173,7 +174,7 @@ public class OrderManager {
                     }
 
                     for (int i = 0; i < numberOfToppings; i++) {
-                        System.out.print("Insert the topping code: ");
+                        System.out.print("Insert the topping code (n to select no other toppings): ");
                         String toppingCode = scanner.nextLine();
 
                         if (toppingCode.equalsIgnoreCase("n") && (!isDeluxe || i > 1)) {
@@ -290,6 +291,23 @@ public class OrderManager {
             }
 
         }
+    }
+
+    public boolean clearOrder(Scanner scanner) {
+        while(true){
+            System.out.print("Are you sure you want to delete the order? (Y/N): ");
+            String input = scanner.nextLine();
+            if(input.equalsIgnoreCase("y")){
+                clearOrder();
+                System.out.println("[Order Manager] Order has been cleared.");
+                return true;
+            } else if(input.equalsIgnoreCase("n")) {
+                return false;
+            } else {
+                System.out.println("[Order Manager] Invalid input. Please retry inserting the correct input.");
+            }
+        }
+
     }
 
     public void clearOrder() {

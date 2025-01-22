@@ -13,23 +13,22 @@ public class Main {
         boolean orderCreated;
         boolean orderCompleted = false;
 
-        while(true) {
-            try{
+        while (true) {
+            try {
                 System.out.println("""
-                    Choose an option:
-                        Q - Quit
-                        1 - Order a Meal Menu
-                        2 - Order Only Burger
-                    """);
+                        Choose an option:
+                            Q - Quit
+                            1 - Order a Meal Menu
+                            2 - Order Only Burger
+                        """);
                 System.out.print("Input: ");
                 String input = scanner.nextLine();
                 boolean isMenu;
-                if(input.equalsIgnoreCase("Q")){
+                if (input.equalsIgnoreCase("Q")) {
                     break;
                 } else if (input.equalsIgnoreCase("1")) {
                     orderCreated = order.createMenu(scanner, true);
                     isMenu = true;
-                    orderCompleted = true;
                     System.out.println("Order correctly inserted! :)");
                 } else if (input.equalsIgnoreCase("2")) {
                     orderCreated = order.createMenu(scanner, false);
@@ -38,23 +37,33 @@ public class Main {
                     throw new InputMismatchException("Invalid input");
                 }
 
-                if(orderCreated) {
-                    while(true) {
+                boolean orderCancelled = false;
+
+                if (orderCreated) {
+                    while (true) {
                         order.printOrder();
-                       System.out.println("""
-                               Confirm Order?
-                               Y - Confirm Order
-                               N - Edit Order """);
-                       System.out.print("Option: ");
-                       input = scanner.nextLine();
-                        if(input.equalsIgnoreCase("N")){
-                            orderCompleted = order.editMenu(scanner, isMenu);
-                            break;
+                        System.out.println("""
+                                Confirm Order?
+                                Y - Confirm Order
+                                N - Edit Order
+                                C - Clear Order """);
+                        System.out.print("Option: ");
+                        input = scanner.nextLine();
+                        orderCompleted = false;
+                        if (input.equalsIgnoreCase("N")) {
+                            order.editMenu(scanner, isMenu);
                         } else if (input.equalsIgnoreCase("Y")) {
                             orderCompleted = true;
                             break;
+                        } else if (input.equalsIgnoreCase("C")) {
+                            orderCancelled = order.clearOrder(scanner);
+                            System.out.println("Order correctly cancelled!");
                         } else {
-                           System.out.println("Invalid input. Please insert Y o N");
+                            System.out.println("Invalid input. Please insert the correct option");
+                        }
+
+                        if(orderCancelled){
+                            break;
                         }
                     }
 
@@ -62,19 +71,19 @@ public class Main {
                     throw new Exception("Meal not created");
                 }
 
-                if(orderCompleted){
+                if (orderCompleted) {
                     order.printOrder();
                     order.confirmAndPay();
                     break;
                 }
 
-            } catch(InputMismatchException e) {
+            } catch (InputMismatchException e) {
                 System.out.println("[Main] " + e.getMessage() + ". Please retry");
             } catch (Exception e) {
                 System.out.println("""
-                [Main] Something went wrong :(
-                Please retry inserting a new order.
-                """);
+                        [Main] Something went wrong :(
+                        Please retry inserting a new order.
+                        """);
                 order.clearOrder();
             }
         }

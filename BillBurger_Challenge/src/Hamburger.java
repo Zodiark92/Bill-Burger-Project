@@ -387,7 +387,7 @@ class DeluxeHamburger extends Hamburger {
             hamburgerDescription = hamburgerDescription.concat("Deluxe Topping: " + firstDeluxeTopping + "\n");
         }
         if(secondDeluxeTopping != null){
-            hamburgerDescription =  hamburgerDescription.concat("Deluxe Topping:  " + secondDeluxeTopping + "\n");
+            hamburgerDescription =  hamburgerDescription.concat("Deluxe Topping: " + secondDeluxeTopping + "\n");
         }
         return hamburgerDescription;
     }
