@@ -2,11 +2,12 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
-    private static Scanner scanner = new Scanner(System.in);
+
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
 
-        System.out.println("**** Hello!! Welcome to Bill's Burger ****");
+       System.out.println("**** Hello!! Welcome to Bill's Burger ****");
 
         OrderManager order = new OrderManager();
 
@@ -84,6 +85,7 @@ public class Main {
                         [Main] Something went wrong :(
                         Please retry inserting a new order.
                         """);
+                e.printStackTrace();
                 order.clearOrder();
             }
         }

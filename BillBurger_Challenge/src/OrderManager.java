@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class OrderManager {
     private Meal meal;
 
-    private int checkHamburgerCode = 14;
+    private final int MAX_HAMBURGER_CODE = 14;
 
     public boolean createMenu(Scanner scanner, boolean isMenu)  {
 
@@ -75,7 +75,7 @@ public class OrderManager {
         System.out.print("Insert the hamburger code: ");
         int hamburgerCode = Integer.parseInt(scanner.nextLine());
 
-        if (hamburgerCode < 0 || hamburgerCode > checkHamburgerCode) {
+        if (hamburgerCode < 0 || hamburgerCode > MAX_HAMBURGER_CODE) {
             throw new InvalidNameException("Hamburger not found");
         }
 
@@ -161,13 +161,13 @@ public class OrderManager {
                     break;
                 }
 
-                int numberOfToppings = isDeluxe ? 5 : 3;
+                int numberOfToppings = isDeluxe ? Meal.NUMBER_MAX_DELUXE_TOPPINGS : Meal.NUMBER_MAX_TOPPINGS;
                 if (codeOption.equalsIgnoreCase("0")) {
                    printToppingMenu();
 
                     System.out.printf("You can add up to %d toppings (enter n to select none).%n" +
                             "If the hamburger has already other toppings, these will be overridden.%n" +
-                            "If the hamburger is deluxe, you have to choice from 2 up to 5 toppings%n", numberOfToppings);
+                            "If the hamburger is deluxe, you have to choice from 2 up to %d toppings%n", Meal.NUMBER_MAX_TOPPINGS, Meal.NUMBER_MAX_DELUXE_TOPPINGS);
                     meal.clearToppings();
                     if(isDeluxe){
                         canConfirmToppings = false;
@@ -188,9 +188,7 @@ public class OrderManager {
                             continue;
                         } else
 
-                        if (meal.addTopping(i, Integer.parseInt(toppingCode))) {
-                            System.out.println("Topping added");
-                        } else {
+                        if (!meal.addTopping(i, Integer.parseInt(toppingCode))) {
                             System.out.println("The topping is already present. Select another topping");
                             i--;
                         }
@@ -255,7 +253,7 @@ public class OrderManager {
                 if(drinkCodeInput >= 0 && drinkCodeInput <= 3){
                     meal.addDrink(drinkCodeInput);
                     System.out.printf("[Order Manager] Drink %s added to the menu.%n" +
-                            "Meal price: %.2f%n ", meal.getDrink().getDrinkDesc(), meal.getTotalPrice());
+                            "Meal price: %.2f%n ", meal.getDrink(), meal.getTotalPrice());
                     break;
                 } else {
                     throw new InvalidNameException();
